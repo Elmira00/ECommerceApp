@@ -3,6 +3,8 @@
 ** All Rights Reserved.
 */
 
+
+
 SET NOCOUNT ON
 GO
 
@@ -32,6 +34,17 @@ GO
 SET DATEFORMAT mdy
 GO
 use "Northwind"
+GO
+ALTER TABLE [dbo].[Order Details]
+DROP CONSTRAINT FK_Order_Details_Products;
+
+ALTER TABLE [dbo].[Order Details]
+ADD CONSTRAINT FK_Order_Details_Products
+FOREIGN KEY (ProductID)
+REFERENCES [dbo].[Products](ProductID)
+ON DELETE CASCADE;
+
+
 go
 if exists (select * from sysobjects where id = object_id('dbo.Employee Sales by Country') and sysstat & 0xf = 4)
 	drop procedure "dbo"."Employee Sales by Country"
@@ -9332,3 +9345,10 @@ ALTER TABLE EmployeeTerritories
 		[TerritoryID]
 	)
 GO
+
+use "Northwind"
+SELECT 
+    name AS FK_Name,
+    delete_referential_action_desc
+FROM sys.foreign_keys
+WHERE name = 'FK_Order_Details_Products';

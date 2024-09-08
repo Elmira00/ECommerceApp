@@ -1,11 +1,6 @@
 ﻿using ECommerce.Business.Abstract;
 using ECommerce.DataAccess.Abstraction;
 using ECommerce.Entities.Models;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace ECommerce.Business.Concrete
 {
@@ -25,8 +20,9 @@ namespace ECommerce.Business.Concrete
 
         public async Task DeleteAsync(int id)
         {
-            var item =await _productDal.Get(p=>p.ProductId == id);
+            var item = await _productDal.Get(p => p.ProductId == id);
             await _productDal.Delete(item);
+
         }
 
         public async Task<List<Product>> GetAllAsync()
@@ -36,12 +32,12 @@ namespace ECommerce.Business.Concrete
 
         public async Task<List<Product>> GetAllByCategoryAsync(int categoryId)
         {
-            return await _productDal.GetList(p=>p.CategoryId == categoryId || categoryId==0);
+            return await _productDal.GetList(p => p.CategoryId == categoryId || categoryId == 0);
         }
 
         public async Task<Product> GetByIdAsync(int id)
         {
-            return await _productDal.Get(p=>p.ProductId==id);
+            return await _productDal.Get(p => p.ProductId == id);
         }
 
         public async Task UpdateAsync(Product product)

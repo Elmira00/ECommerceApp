@@ -1,11 +1,6 @@
 ﻿using ECommerce.Core.Abstraction;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Linq.Expressions;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace ECommerce.Core.DataAccess.EntityFramework
 {
@@ -29,10 +24,19 @@ namespace ECommerce.Core.DataAccess.EntityFramework
 
         public async Task Delete(TEntity entity)
         {
-            var deletedEntity = context.Entry(entity);
-            deletedEntity.State = EntityState.Deleted;
+            // Attach entity if not already tracked
+            if (context.Entry(entity).State == EntityState.Detached)
+            {
+                context.Set<TEntity>().Attach(entity);
+            }
+
+            // Mark entity as deleted
+            context.Entry(entity).State = EntityState.Deleted;
+
+            // Save changes to the database
             await context.SaveChangesAsync();
         }
+
 
         public async Task<TEntity> Get(Expression<Func<TEntity, bool>> filter)
         {
